@@ -1,0 +1,899 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lapo Studio | Admin Proyectos</title>
+  <meta name="description" content="Panel para gestionar proyectos de Lapo Studio y publicar cambios en GitHub Pages." />
+
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+
+  <style>
+    :root {
+      --primary-bg: #0a0e27;
+      --secondary-bg: #151a2e;
+      --accent-cyan: #00f0ff;
+      --accent-purple: #a855f7;
+      --accent-pink: #ff006e;
+      --text-primary: #e0e7ff;
+      --text-secondary: #94a3b8;
+      --border-glow: rgba(0, 240, 255, 0.2);
+      --font-display: 'Orbitron', sans-serif;
+      --font-body: 'Inter', sans-serif;
+    }
+
+    body {
+      font-family: var(--font-body);
+      background: radial-gradient(1200px 600px at 15% 10%, rgba(0,240,255,0.08), transparent 60%),
+                  radial-gradient(900px 500px at 85% 30%, rgba(168,85,247,0.08), transparent 60%),
+                  var(--primary-bg);
+      color: var(--text-primary);
+      min-height: 100vh;
+    }
+
+    .glass {
+      background: rgba(10, 14, 39, 0.75);
+      border: 1px solid var(--border-glow);
+      backdrop-filter: blur(10px);
+      box-shadow: 0 20px 80px rgba(0, 240, 255, 0.08);
+    }
+
+    .title {
+      font-family: var(--font-display);
+      font-weight: 900;
+      letter-spacing: 1px;
+      background: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple), var(--accent-pink));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      filter: drop-shadow(0 0 24px rgba(0, 240, 255, 0.25));
+    }
+
+    .label { color: var(--text-secondary); font-weight: 600; }
+
+    input, textarea, select {
+      width: 100%;
+      padding: 0.85rem 1rem;
+      border-radius: 12px;
+      background: rgba(21, 26, 46, 0.9);
+      border: 1px solid rgba(0, 240, 255, 0.18);
+      color: var(--text-primary);
+      outline: none;
+      transition: box-shadow .2s ease, border-color .2s ease;
+    }
+
+    textarea { min-height: 120px; resize: vertical; }
+
+    input:focus, textarea:focus, select:focus {
+      border-color: var(--accent-cyan);
+      box-shadow: 0 0 0 3px rgba(0, 240, 255, 0.12), 0 0 24px rgba(0, 240, 255, 0.15);
+    }
+
+    .btn {
+      padding: 0.9rem 1.1rem;
+      border-radius: 12px;
+      font-family: var(--font-display);
+      font-weight: 800;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      transition: transform .15s ease, box-shadow .15s ease, background .2s ease;
+      cursor: pointer;
+      user-select: none;
+      border: 1px solid rgba(0,240,255,0.35);
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple));
+      color: var(--primary-bg);
+      border: none;
+      box-shadow: 0 12px 34px rgba(0, 240, 255, 0.18);
+    }
+
+    .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 18px 50px rgba(0, 240, 255, 0.25); }
+
+    .btn-ghost {
+      background: rgba(0,240,255,0.06);
+      color: var(--accent-cyan);
+    }
+
+    .btn-ghost:hover { background: rgba(0,240,255,0.12); transform: translateY(-1px); }
+
+    .btn-danger {
+      background: rgba(255,0,110,0.12);
+      color: var(--accent-pink);
+      border-color: rgba(255,0,110,0.35);
+    }
+
+    .btn-danger:hover { background: rgba(255,0,110,0.18); transform: translateY(-1px); }
+
+    .chip {
+      padding: .25rem .6rem;
+      border-radius: 999px;
+      border: 1px solid rgba(0,240,255,0.25);
+      background: rgba(0,240,255,0.06);
+      color: var(--accent-cyan);
+      font-size: .8rem;
+      white-space: nowrap;
+    }
+
+    .row {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 1rem;
+    }
+
+    .col-12 { grid-column: span 12; }
+    .col-8 { grid-column: span 8; }
+    .col-6 { grid-column: span 6; }
+    .col-4 { grid-column: span 4; }
+
+    @media (max-width: 900px) {
+      .col-8, .col-6, .col-4 { grid-column: span 12; }
+    }
+
+    .divider {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(0,240,255,0.25), transparent);
+      margin: 1.2rem 0;
+    }
+
+    .toast {
+      position: fixed;
+      bottom: 18px;
+      left: 50%;
+      transform: translateX(-50%);
+      padding: 0.9rem 1.2rem;
+      border-radius: 14px;
+      border: 1px solid var(--border-glow);
+      background: rgba(10, 14, 39, 0.9);
+      backdrop-filter: blur(10px);
+      box-shadow: 0 18px 60px rgba(0,0,0,0.35);
+      display: none;
+      max-width: min(780px, 92vw);
+      color: var(--text-primary);
+    }
+
+    .toast.show { display: block; }
+    .toast.success { border-color: rgba(0,240,255,0.5); }
+    .toast.error { border-color: rgba(255,0,110,0.5); }
+
+    .muted { color: var(--text-secondary); }
+    code.kbd {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      padding: 0.1rem 0.35rem;
+      border-radius: 8px;
+      border: 1px solid rgba(0,240,255,0.18);
+      background: rgba(0,240,255,0.06);
+      color: var(--accent-cyan);
+    }
+
+    a { color: var(--accent-cyan); text-decoration: none; }
+    a:hover { text-shadow: 0 0 16px rgba(0,240,255,0.35); }
+  </style>
+</head>
+<body>
+  <header class="max-w-6xl mx-auto px-4 py-10">
+    <div class="glass rounded-2xl p-6">
+      <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+        <div>
+          <div class="title text-3xl md:text-4xl">LAPO STUDIO · ADMIN</div>
+          <p class="muted mt-2">Administra tus proyectos (solo herramientas) y publícalos directo a tu repo usando la API de GitHub.</p>
+        </div>
+        <div class="flex gap-2">
+          <a class="btn btn-ghost" href="../index.html">← Volver a la web</a>
+          <button class="btn btn-ghost" id="btnLoad">Cargar JSON</button>
+          <button class="btn btn-primary" id="btnSave">Guardar en GitHub</button>
+        </div>
+      </div>
+      <div class="divider"></div>
+
+      <div class="row">
+        <div class="col-4">
+          <label class="label">Owner</label>
+          <input id="ghOwner" placeholder="ej: lapostudio" />
+        </div>
+        <div class="col-4">
+          <label class="label">Repo</label>
+          <input id="ghRepo" placeholder="ej: lapo-studio" />
+        </div>
+        <div class="col-4">
+          <label class="label">Branch</label>
+          <input id="ghBranch" placeholder="main" />
+        </div>
+
+        <div class="col-8">
+          <label class="label">Token (Classic o Fine-grained con permisos de Contents)</label>
+          <input id="ghToken" type="password" placeholder="ghp_..." />
+          <p class="muted text-sm mt-2">Se guarda en <code class="kbd">localStorage</code> del navegador. No lo compartas.</p>
+        </div>
+        <div class="col-4">
+          <label class="label">Ruta JSON</label>
+          <input id="ghPath" placeholder="data/projects.json" />
+          <p class="muted text-sm mt-2">Por defecto: <code class="kbd">data/projects.json</code></p>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="row">
+        <div class="col-8">
+          <div class="flex items-center justify-between gap-3">
+            <div>
+              <div class="text-lg" style="font-family: var(--font-display); color: var(--accent-cyan);">Proyectos</div>
+              <div class="muted text-sm">Crea, edita y elimina. Al guardar, se actualiza el JSON en tu repo.</div>
+            </div>
+            <div class="flex gap-2">
+              <button class="btn btn-ghost" id="btnNew">+ Nuevo</button>
+              <button class="btn btn-ghost" id="btnDuplicate" title="Duplica el seleccionado">Duplicar</button>
+              <button class="btn btn-danger" id="btnDelete" title="Elimina el seleccionado">Eliminar</button>
+            </div>
+          </div>
+
+          <div class="mt-4 row">
+            <div class="col-12">
+              <label class="label">Selecciona un proyecto</label>
+              <select id="projectSelect"></select>
+            </div>
+
+            <div class="col-6">
+              <label class="label">Estado</label>
+              <select id="fieldStatus">
+                <option value="completed">Completado</option>
+                <option value="development">En desarrollo</option>
+                <option value="planned">Planeado</option>
+              </select>
+            </div>
+            <div class="col-6">
+              <label class="label">Tipo</label>
+              <select id="fieldType" disabled>
+                <option value="tool">Herramienta</option>
+              </select>
+              <p class="muted text-sm mt-2">Solo herramientas (según lo que pediste).</p>
+            </div>
+
+            <div class="col-8">
+              <label class="label">Título</label>
+              <input id="fieldTitle" placeholder="Nombre de la herramienta" />
+            </div>
+            <div class="col-4">
+              <label class="label">Versión</label>
+              <input id="fieldVersion" placeholder="v1.0 / Beta 0.3" />
+            </div>
+
+            <div class="col-12">
+              <label class="label">Descripción corta</label>
+              <textarea id="fieldDescription" placeholder="1-2 líneas para la card"></textarea>
+            </div>
+
+            <div class="col-12">
+              <label class="label">Descripción larga (modal)</label>
+              <textarea id="fieldDescriptionLong" placeholder="Descripción detallada"></textarea>
+            </div>
+
+            <div class="col-12">
+              <label class="label">Tecnologías (separadas por coma)</label>
+              <input id="fieldTech" placeholder="Python, FastAPI, SQLite" />
+            </div>
+
+            <div class="col-4">
+              <label class="label">Icono/Imagen (emoji o URL)</label>
+              <input id="fieldImage" placeholder="🧰 o https://.../img.jpg" />
+            </div>
+            <div class="col-4" id="wrapDate">
+              <label class="label">Fecha (completado)</label>
+              <input id="fieldDate" placeholder="2024-01" />
+            </div>
+            <div class="col-4" id="wrapEstimated">
+              <label class="label">Fecha estimada</label>
+              <input id="fieldEstimated" placeholder="2025-Q2" />
+            </div>
+
+            <div class="col-4" id="wrapProgress">
+              <label class="label">Progreso (0-100)</label>
+              <input id="fieldProgress" type="number" min="0" max="100" placeholder="45" />
+            </div>
+            <div class="col-8" id="wrapRepo">
+              <label class="label">Repo/Progreso Link (GitHub)</label>
+              <input id="fieldRepoLink" placeholder="https://github.com/owner/repo" />
+            </div>
+
+            <div class="col-6" id="wrapDownload">
+              <label class="label">Download Link (para completado)</label>
+              <input id="fieldDownload" placeholder="herramientas/miapp.zip o URL" />
+            </div>
+            <div class="col-6" id="wrapDemo">
+              <label class="label">Demo Link (opcional)</label>
+              <input id="fieldDemo" placeholder="https://..." />
+            </div>
+
+            <div class="col-12">
+              <label class="label">Features (una por línea)</label>
+              <textarea id="fieldFeatures" placeholder="Feature 1\nFeature 2\nFeature 3"></textarea>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-4">
+          <div class="glass rounded-2xl p-5">
+            <div class="text-lg" style="font-family: var(--font-display); color: var(--accent-purple);">Subir archivo a /herramientas</div>
+            <p class="muted text-sm mt-2">Esto sube un <b>.zip</b>, <b>.exe</b>, etc. al repo y te devuelve el link para pegarlo en <b>Download Link</b>.</p>
+
+            <div class="mt-4">
+              <label class="label">Archivo</label>
+              <input id="fileUpload" type="file" />
+            </div>
+
+            <div class="mt-3">
+              <label class="label">Nombre destino (opcional)</label>
+              <input id="fileDestName" placeholder="miapp.zip" />
+              <p class="muted text-sm mt-2">Si lo dejas vacío, usa el nombre del archivo.</p>
+            </div>
+
+            <div class="mt-4 flex gap-2">
+              <button class="btn btn-primary w-full" id="btnUpload">Subir</button>
+            </div>
+
+            <div class="divider"></div>
+
+            <div>
+              <div class="text-sm muted">Consejo:</div>
+              <div class="mt-2">Descargas locales en GitHub Pages suelen ser links como:</div>
+              <div class="mt-2"><code class="kbd">herramientas/archivo.zip</code></div>
+            </div>
+          </div>
+
+          <div class="glass rounded-2xl p-5 mt-4">
+            <div class="text-lg" style="font-family: var(--font-display); color: var(--accent-cyan);">Preview rápido</div>
+            <div class="muted text-sm mt-2">Esto es solo un preview del JSON (no la card exacta).</div>
+            <pre id="preview" class="mt-3" style="white-space: pre-wrap; word-break: break-word; font-size: 12px; color: var(--text-secondary);"></pre>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div id="toast" class="toast"></div>
+
+  <script>
+    const LS_KEY = 'lapo_admin_github';
+
+    const el = (id) => document.getElementById(id);
+
+    const state = {
+      sha: null,
+      data: { completed: [], development: [], planned: [] },
+      selectedKey: null, // "completed|development|planned" + ":" + id
+    };
+
+    function toast(type, msg) {
+      const t = el('toast');
+      t.className = 'toast show ' + type;
+      t.textContent = msg;
+      setTimeout(() => {
+        t.className = 'toast';
+      }, 4500);
+    }
+
+    function getConfig() {
+      return {
+        owner: el('ghOwner').value.trim(),
+        repo: el('ghRepo').value.trim(),
+        branch: el('ghBranch').value.trim() || 'main',
+        token: el('ghToken').value.trim(),
+        path: el('ghPath').value.trim() || 'data/projects.json'
+      };
+    }
+
+    function saveConfigToLS() {
+      const cfg = getConfig();
+      localStorage.setItem(LS_KEY, JSON.stringify({
+        owner: cfg.owner,
+        repo: cfg.repo,
+        branch: cfg.branch,
+        token: cfg.token,
+        path: cfg.path
+      }));
+    }
+
+    function loadConfigFromLS() {
+      try {
+        const raw = localStorage.getItem(LS_KEY);
+        if (!raw) return;
+        const cfg = JSON.parse(raw);
+        el('ghOwner').value = cfg.owner || '';
+        el('ghRepo').value = cfg.repo || '';
+        el('ghBranch').value = cfg.branch || 'main';
+        el('ghToken').value = cfg.token || '';
+        el('ghPath').value = cfg.path || 'data/projects.json';
+      } catch (e) {}
+    }
+
+    function ghHeaders(token) {
+      return {
+        'Accept': 'application/vnd.github+json',
+        'Authorization': `Bearer ${token}`
+      };
+    }
+
+    function b64EncodeUtf8(str) {
+      return btoa(unescape(encodeURIComponent(str)));
+    }
+
+    function b64DecodeUtf8(b64) {
+      return decodeURIComponent(escape(atob(b64)));
+    }
+
+    async function ghGetJson() {
+      const cfg = getConfig();
+      if (!cfg.owner || !cfg.repo || !cfg.token) throw new Error('Falta owner/repo/token.');
+
+      const url = `https://api.github.com/repos/${cfg.owner}/${cfg.repo}/contents/${cfg.path}?ref=${encodeURIComponent(cfg.branch)}`;
+      const res = await fetch(url, { headers: ghHeaders(cfg.token) });
+      if (!res.ok) {
+        const txt = await res.text();
+        throw new Error(`Error GET (${res.status}): ${txt}`);
+      }
+      const json = await res.json();
+      state.sha = json.sha;
+      const content = Array.isArray(json) ? null : json.content;
+      if (!content) throw new Error('La ruta no parece ser un archivo.');
+      const decoded = b64DecodeUtf8(content.replace(/\n/g, ''));
+      const parsed = JSON.parse(decoded);
+
+      // Normaliza
+      state.data = {
+        completed: Array.isArray(parsed.completed) ? parsed.completed : [],
+        development: Array.isArray(parsed.development) ? parsed.development : [],
+        planned: Array.isArray(parsed.planned) ? parsed.planned : []
+      };
+
+      // Solo herramientas
+      for (const k of ['completed','development','planned']) {
+        state.data[k] = state.data[k].map(p => ({...p, type: 'tool'}));
+      }
+
+      state.selectedKey = null;
+      rebuildProjectSelect();
+      selectFirstIfAny();
+      updatePreview();
+    }
+
+    async function ghPutJson(message) {
+      const cfg = getConfig();
+      if (!cfg.owner || !cfg.repo || !cfg.token) throw new Error('Falta owner/repo/token.');
+
+      const body = {
+        message: message || 'Update projects.json via Lapo Admin',
+        content: b64EncodeUtf8(JSON.stringify(state.data, null, 2)),
+        branch: cfg.branch
+      };
+      if (state.sha) body.sha = state.sha;
+
+      const url = `https://api.github.com/repos/${cfg.owner}/${cfg.repo}/contents/${cfg.path}`;
+      const res = await fetch(url, {
+        method: 'PUT',
+        headers: { ...ghHeaders(cfg.token), 'Content-Type': 'application/json' },
+        body: JSON.stringify(body)
+      });
+      if (!res.ok) {
+        const txt = await res.text();
+        throw new Error(`Error PUT (${res.status}): ${txt}`);
+      }
+      const out = await res.json();
+      state.sha = out.content?.sha || state.sha;
+      return out;
+    }
+
+    async function ghUploadFileToHerramientas(file, destName) {
+      const cfg = getConfig();
+      if (!cfg.owner || !cfg.repo || !cfg.token) throw new Error('Falta owner/repo/token.');
+      if (!file) throw new Error('Selecciona un archivo.');
+
+      const filename = (destName || file.name).trim();
+      if (!filename) throw new Error('Nombre destino inválido.');
+
+      const path = `herramientas/${filename}`;
+
+      const base64 = await new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onerror = () => reject(new Error('No se pudo leer el archivo.'));
+        reader.onload = () => {
+          const dataUrl = reader.result;
+          const b64 = String(dataUrl).split(',')[1];
+          resolve(b64);
+        };
+        reader.readAsDataURL(file);
+      });
+
+      // Obtiene sha si existe (para overwrite)
+      let sha = null;
+      {
+        const urlGet = `https://api.github.com/repos/${cfg.owner}/${cfg.repo}/contents/${path}?ref=${encodeURIComponent(cfg.branch)}`;
+        const resGet = await fetch(urlGet, { headers: ghHeaders(cfg.token) });
+        if (resGet.ok) {
+          const j = await resGet.json();
+          sha = j.sha;
+        }
+      }
+
+      const body = {
+        message: `Upload ${filename} via Lapo Admin`,
+        content: base64,
+        branch: cfg.branch
+      };
+      if (sha) body.sha = sha;
+
+      const url = `https://api.github.com/repos/${cfg.owner}/${cfg.repo}/contents/${path}`;
+      const res = await fetch(url, {
+        method: 'PUT',
+        headers: { ...ghHeaders(cfg.token), 'Content-Type': 'application/json' },
+        body: JSON.stringify(body)
+      });
+      if (!res.ok) {
+        const txt = await res.text();
+        throw new Error(`Upload error (${res.status}): ${txt}`);
+      }
+
+      return { path, downloadLink: path };
+    }
+
+    function keyFor(status, id) {
+      return `${status}:${id}`;
+    }
+
+    function allProjectsFlat() {
+      const out = [];
+      for (const status of ['completed','development','planned']) {
+        for (const p of state.data[status]) {
+          out.push({ status, p });
+        }
+      }
+      out.sort((a,b) => (a.p.title || '').localeCompare(b.p.title || ''));
+      return out;
+    }
+
+    function rebuildProjectSelect() {
+      const sel = el('projectSelect');
+      sel.innerHTML = '';
+
+      const groups = {
+        completed: 'Completados',
+        development: 'En desarrollo',
+        planned: 'Planeados'
+      };
+
+      for (const status of ['completed','development','planned']) {
+        const optGroup = document.createElement('optgroup');
+        optGroup.label = groups[status];
+        const items = [...state.data[status]].sort((a,b)=> (a.title||'').localeCompare(b.title||''));
+
+        for (const p of items) {
+          const opt = document.createElement('option');
+          opt.value = keyFor(status, p.id);
+          opt.textContent = `${p.title || '(sin título)'} ${p.version ? '— ' + p.version : ''}`;
+          optGroup.appendChild(opt);
+        }
+
+        sel.appendChild(optGroup);
+      }
+
+      // Si no hay nada
+      if (allProjectsFlat().length === 0) {
+        const opt = document.createElement('option');
+        opt.value = '';
+        opt.textContent = 'No hay proyectos. Crea uno con “Nuevo”.';
+        sel.appendChild(opt);
+      }
+    }
+
+    function selectFirstIfAny() {
+      const flat = allProjectsFlat();
+      if (flat.length === 0) {
+        state.selectedKey = null;
+        clearEditor();
+        return;
+      }
+      const k = keyFor(flat[0].status, flat[0].p.id);
+      state.selectedKey = k;
+      el('projectSelect').value = k;
+      loadSelectedIntoEditor();
+    }
+
+    function getSelectedRef() {
+      const key = state.selectedKey || el('projectSelect').value;
+      if (!key) return null;
+      const [status, idStr] = key.split(':');
+      const id = Number(idStr);
+      const list = state.data[status];
+      const idx = list.findIndex(x => Number(x.id) === id);
+      if (idx === -1) return null;
+      return { status, idx, p: list[idx] };
+    }
+
+    function clearEditor() {
+      el('fieldStatus').value = 'completed';
+      el('fieldTitle').value = '';
+      el('fieldVersion').value = '';
+      el('fieldDescription').value = '';
+      el('fieldDescriptionLong').value = '';
+      el('fieldTech').value = '';
+      el('fieldImage').value = '';
+      el('fieldDate').value = '';
+      el('fieldEstimated').value = '';
+      el('fieldProgress').value = '';
+      el('fieldRepoLink').value = '';
+      el('fieldDownload').value = '';
+      el('fieldDemo').value = '';
+      el('fieldFeatures').value = '';
+      updateVisibility();
+      updatePreview();
+    }
+
+    function updateVisibility() {
+      const status = el('fieldStatus').value;
+      const show = (id, v) => { el(id).style.display = v ? '' : 'none'; };
+
+      // Completed
+      show('wrapDate', status === 'completed');
+      show('wrapDownload', status === 'completed');
+      show('wrapDemo', status === 'completed');
+
+      // Development
+      show('wrapProgress', status === 'development');
+      show('wrapRepo', status === 'development');
+
+      // Planned
+      show('wrapEstimated', status !== 'completed');
+
+      if (status === 'planned') {
+        el('wrapRepo').style.display = 'none';
+        el('wrapProgress').style.display = 'none';
+      }
+
+      if (status === 'completed') {
+        el('wrapEstimated').style.display = 'none';
+      }
+    }
+
+    function loadSelectedIntoEditor() {
+      const ref = getSelectedRef();
+      if (!ref) {
+        clearEditor();
+        return;
+      }
+
+      const p = ref.p;
+      el('fieldStatus').value = ref.status;
+      el('fieldTitle').value = p.title || '';
+      el('fieldVersion').value = p.version || '';
+      el('fieldDescription').value = p.description || '';
+      el('fieldDescriptionLong').value = p.descriptionLong || '';
+      el('fieldTech').value = (Array.isArray(p.tech) ? p.tech.join(', ') : '');
+      el('fieldImage').value = p.image || '';
+      el('fieldDate').value = p.date || '';
+      el('fieldEstimated').value = p.estimatedDate || '';
+      el('fieldProgress').value = (p.progress ?? '') + '';
+      el('fieldRepoLink').value = p.repoLink || '';
+      el('fieldDownload').value = p.downloadLink || '';
+      el('fieldDemo').value = p.demoLink || '';
+      el('fieldFeatures').value = Array.isArray(p.features) ? p.features.join('\n') : '';
+
+      updateVisibility();
+      updatePreview();
+    }
+
+    function writeEditorIntoSelected() {
+      const ref = getSelectedRef();
+      if (!ref) return;
+
+      const desiredStatus = el('fieldStatus').value;
+
+      const updated = {
+        ...ref.p,
+        type: 'tool',
+        title: el('fieldTitle').value.trim(),
+        version: el('fieldVersion').value.trim(),
+        description: el('fieldDescription').value.trim(),
+        descriptionLong: el('fieldDescriptionLong').value.trim(),
+        tech: el('fieldTech').value.split(',').map(s => s.trim()).filter(Boolean),
+        image: el('fieldImage').value.trim(),
+        features: el('fieldFeatures').value.split('\n').map(s => s.trim()).filter(Boolean)
+      };
+
+      // Campos por estado
+      if (desiredStatus === 'completed') {
+        updated.date = el('fieldDate').value.trim();
+        updated.downloadLink = el('fieldDownload').value.trim();
+        updated.demoLink = el('fieldDemo').value.trim();
+        delete updated.progress;
+        delete updated.estimatedDate;
+        delete updated.repoLink;
+      } else if (desiredStatus === 'development') {
+        updated.progress = Math.max(0, Math.min(100, Number(el('fieldProgress').value || 0)));
+        updated.estimatedDate = el('fieldEstimated').value.trim();
+        updated.repoLink = el('fieldRepoLink').value.trim();
+        delete updated.date;
+        delete updated.downloadLink;
+        delete updated.demoLink;
+      } else {
+        // planned
+        updated.estimatedDate = el('fieldEstimated').value.trim();
+        delete updated.date;
+        delete updated.progress;
+        delete updated.downloadLink;
+        delete updated.demoLink;
+        delete updated.repoLink;
+        // planned suele ser más corto
+        if (!updated.descriptionLong) delete updated.descriptionLong;
+        if (!updated.features?.length) delete updated.features;
+      }
+
+      // Mueve entre listas si cambió el estado
+      if (ref.status !== desiredStatus) {
+        state.data[ref.status].splice(ref.idx, 1);
+        state.data[desiredStatus].push(updated);
+        state.selectedKey = keyFor(desiredStatus, updated.id);
+      } else {
+        state.data[ref.status][ref.idx] = updated;
+      }
+
+      rebuildProjectSelect();
+      el('projectSelect').value = state.selectedKey;
+      updatePreview();
+    }
+
+    function updatePreview() {
+      const ref = getSelectedRef();
+      if (!ref) {
+        el('preview').textContent = JSON.stringify(state.data, null, 2);
+        return;
+      }
+      el('preview').textContent = JSON.stringify(ref.p, null, 2);
+    }
+
+    function nextId() {
+      const ids = allProjectsFlat().map(x => Number(x.p.id)).filter(n => Number.isFinite(n));
+      const max = ids.length ? Math.max(...ids) : 0;
+      return max + 1;
+    }
+
+    function newProjectTemplate(status) {
+      const id = nextId();
+      const base = {
+        id,
+        type: 'tool',
+        title: 'Nueva Herramienta',
+        version: 'v0.1',
+        description: 'Descripción corta...',
+        tech: ['Tech1', 'Tech2'],
+        image: '🧰'
+      };
+      if (status === 'completed') {
+        return { ...base, date: '2025-01', downloadLink: 'herramientas/miapp.zip', demoLink: '' };
+      }
+      if (status === 'development') {
+        return { ...base, progress: 10, estimatedDate: '2025-Q2', repoLink: '' };
+      }
+      return { ...base, estimatedDate: '2025-Q3' };
+    }
+
+    function ensureSelectedSaved() {
+      // Cada vez que el usuario cambia un campo, persistimos al proyecto seleccionado.
+      writeEditorIntoSelected();
+    }
+
+    // Events
+    el('btnLoad').addEventListener('click', async () => {
+      try {
+        saveConfigToLS();
+        await ghGetJson();
+        toast('success', 'JSON cargado desde GitHub.');
+      } catch (e) {
+        toast('error', e.message || String(e));
+      }
+    });
+
+    el('btnSave').addEventListener('click', async () => {
+      try {
+        saveConfigToLS();
+        // Asegura que lo que esté en el editor quede en state
+        writeEditorIntoSelected();
+        await ghPutJson('Update data/projects.json (Lapo Admin)');
+        toast('success', 'Guardado en GitHub. Dale 10-30s y refresca tu GitHub Pages.');
+      } catch (e) {
+        toast('error', e.message || String(e));
+      }
+    });
+
+    el('btnNew').addEventListener('click', () => {
+      const status = el('fieldStatus').value || 'completed';
+      const p = newProjectTemplate(status);
+      state.data[status].push(p);
+      state.selectedKey = keyFor(status, p.id);
+      rebuildProjectSelect();
+      el('projectSelect').value = state.selectedKey;
+      loadSelectedIntoEditor();
+      toast('success', 'Proyecto creado (no olvides Guardar en GitHub).');
+    });
+
+    el('btnDuplicate').addEventListener('click', () => {
+      const ref = getSelectedRef();
+      if (!ref) return;
+      writeEditorIntoSelected();
+      const clone = JSON.parse(JSON.stringify(ref.p));
+      clone.id = nextId();
+      clone.title = (clone.title || 'Proyecto') + ' (copia)';
+      state.data[ref.status].push(clone);
+      state.selectedKey = keyFor(ref.status, clone.id);
+      rebuildProjectSelect();
+      el('projectSelect').value = state.selectedKey;
+      loadSelectedIntoEditor();
+      toast('success', 'Duplicado creado.');
+    });
+
+    el('btnDelete').addEventListener('click', () => {
+      const ref = getSelectedRef();
+      if (!ref) return;
+      const ok = confirm(`Eliminar “${ref.p.title}” (${ref.status})?`);
+      if (!ok) return;
+      state.data[ref.status].splice(ref.idx, 1);
+      state.selectedKey = null;
+      rebuildProjectSelect();
+      selectFirstIfAny();
+      toast('success', 'Eliminado (falta Guardar en GitHub).');
+    });
+
+    el('projectSelect').addEventListener('change', () => {
+      state.selectedKey = el('projectSelect').value;
+      loadSelectedIntoEditor();
+    });
+
+    el('fieldStatus').addEventListener('change', () => {
+      updateVisibility();
+      ensureSelectedSaved();
+    });
+
+    // Autosave editor -> state
+    const editorFields = [
+      'fieldTitle','fieldVersion','fieldDescription','fieldDescriptionLong','fieldTech','fieldImage',
+      'fieldDate','fieldEstimated','fieldProgress','fieldRepoLink','fieldDownload','fieldDemo','fieldFeatures'
+    ];
+
+    editorFields.forEach(id => {
+      el(id).addEventListener('input', () => {
+        ensureSelectedSaved();
+      });
+    });
+
+    el('btnUpload').addEventListener('click', async () => {
+      try {
+        saveConfigToLS();
+        const file = el('fileUpload').files?.[0];
+        const name = el('fileDestName').value.trim();
+        const out = await ghUploadFileToHerramientas(file, name);
+        el('fieldDownload').value = out.downloadLink;
+        updateVisibility();
+        ensureSelectedSaved();
+        toast('success', `Subido: ${out.path}. Copiado a Download Link.`);
+      } catch (e) {
+        toast('error', e.message || String(e));
+      }
+    });
+
+    // Init
+    loadConfigFromLS();
+    el('ghBranch').value = el('ghBranch').value || 'main';
+    el('ghPath').value = el('ghPath').value || 'data/projects.json';
+    updateVisibility();
+
+    // Tip: auto-load if config looks present
+    window.addEventListener('keydown', (e) => {
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 's') {
+        e.preventDefault();
+        el('btnSave').click();
+      }
+    });
+  </script>
+</body>
+</html>

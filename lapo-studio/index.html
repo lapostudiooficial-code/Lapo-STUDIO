@@ -1,0 +1,1656 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Lapo Studio - Portfolio de herramientas de software.">
+    <meta name="author" content="Lorenzo Pérez Olivera">
+    <title>Lapo Studio | Portfolio Cyberpunk (Herramientas)</title>
+
+    <!-- Tailwind (requerido) -->
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+
+    <!-- Fuentes -->
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+
+    <!-- Particles.js -->
+    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+
+    <!-- EmailJS -->
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+
+    <style>
+        /* ===== RESET & VARIABLES ===== */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --primary-bg: #0a0e27;
+            --secondary-bg: #151a2e;
+            --accent-cyan: #00f0ff;
+            --accent-purple: #a855f7;
+            --accent-pink: #ff006e;
+            --text-primary: #e0e7ff;
+            --text-secondary: #94a3b8;
+            --border-glow: rgba(0, 240, 255, 0.2);
+
+            --font-display: 'Orbitron', sans-serif;
+            --font-body: 'Inter', sans-serif;
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: var(--font-body);
+            background: radial-gradient(1100px 520px at 18% 15%, rgba(0,240,255,0.06), transparent 60%),
+                        radial-gradient(1000px 520px at 80% 25%, rgba(168,85,247,0.06), transparent 60%),
+                        var(--primary-bg);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* ===== TYPOGRAPHY ===== */
+        h1, h2, h3, h4, h5, h6 { font-family: var(--font-display); font-weight: 700; line-height: 1.2; }
+
+        h1 { font-size: clamp(2.5rem, 8vw, 5rem); font-weight: 900; }
+
+        h2 {
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            margin-bottom: 3rem;
+            text-align: center;
+            position: relative;
+            display: inline-block;
+            width: 100%;
+        }
+
+        h2::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent-cyan), var(--accent-purple));
+            box-shadow: 0 0 20px var(--accent-cyan);
+        }
+
+        /* ===== NAVIGATION ===== */
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            background: rgba(10, 14, 39, 0.85);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border-glow);
+            transition: all 0.3s ease;
+        }
+
+        .navbar.scrolled {
+            background: rgba(10, 14, 39, 0.95);
+            box-shadow: 0 5px 30px rgba(0, 240, 255, 0.1);
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo {
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 0 30px rgba(0, 240, 255, 0.5);
+            cursor: pointer;
+            white-space: nowrap;
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-menu a {
+            color: var(--text-primary);
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-menu a:hover {
+            color: var(--accent-cyan);
+            text-shadow: 0 0 10px var(--accent-cyan);
+        }
+
+        .nav-menu a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--accent-cyan);
+            transition: width 0.3s ease;
+        }
+
+        .nav-menu a:hover::after { width: 100%; }
+
+        .pill-link {
+            background: rgba(0, 240, 255, 0.08);
+            border: 1px solid rgba(0, 240, 255, 0.35);
+            color: var(--accent-cyan);
+            padding: 0.45rem 0.75rem;
+            border-radius: 999px;
+            font-weight: 800;
+            font-family: var(--font-display);
+            letter-spacing: 1px;
+        }
+
+        .pill-link:hover {
+            background: rgba(0, 240, 255, 0.14);
+            box-shadow: 0 0 18px rgba(0, 240, 255, 0.2);
+        }
+
+        .lang-selector { position: relative; }
+
+        .lang-btn {
+            background: rgba(0, 240, 255, 0.1);
+            border: 1px solid var(--accent-cyan);
+            color: var(--accent-cyan);
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-family: var(--font-body);
+            font-weight: 700;
+            transition: all 0.3s ease;
+        }
+
+        .lang-btn:hover {
+            background: rgba(0, 240, 255, 0.2);
+            box-shadow: 0 0 15px rgba(0, 240, 255, 0.3);
+        }
+
+        .lang-dropdown {
+            position: absolute;
+            top: 120%;
+            right: 0;
+            background: var(--secondary-bg);
+            border: 1px solid var(--accent-cyan);
+            border-radius: 10px;
+            padding: 0.5rem 0;
+            display: none;
+            min-width: 160px;
+            box-shadow: 0 10px 40px rgba(0, 240, 255, 0.2);
+        }
+
+        .lang-dropdown.active { display: block; }
+
+        .lang-option {
+            padding: 0.55rem 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .lang-option:hover { background: rgba(0, 240, 255, 0.1); color: var(--accent-cyan); }
+
+        .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; }
+
+        .hamburger span {
+            width: 25px;
+            height: 3px;
+            background: var(--accent-cyan);
+            border-radius: 3px;
+            transition: all 0.3s ease;
+        }
+
+        /* ===== HERO SECTION ===== */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            padding: 2rem;
+        }
+
+        #particles-js {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: 1;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            max-width: 900px;
+        }
+
+        .hero-title {
+            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple), var(--accent-pink));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes glow {
+            from { filter: drop-shadow(0 0 20px rgba(0, 240, 255, 0.45)); }
+            to { filter: drop-shadow(0 0 40px rgba(168, 85, 247, 0.75)); }
+        }
+
+        .hero-subtitle {
+            font-size: clamp(1.2rem, 3vw, 2rem);
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+        }
+
+        .typing-text {
+            font-family: var(--font-display);
+            font-size: clamp(1rem, 2vw, 1.5rem);
+            color: var(--accent-cyan);
+            min-height: 50px;
+            margin-bottom: 3rem;
+        }
+
+        .typing-text::after { content: '|'; animation: blink 0.7s infinite; }
+        @keyframes blink { 0%, 50% { opacity: 1; } 51%, 100% { opacity: 0; } }
+
+        .cta-button {
+            display: inline-block;
+            padding: 1rem 3rem;
+            background: transparent;
+            border: 2px solid var(--accent-cyan);
+            color: var(--accent-cyan);
+            font-family: var(--font-display);
+            font-weight: 800;
+            font-size: 1.1rem;
+            text-decoration: none;
+            border-radius: 10px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .cta-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 240, 255, 0.3), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .cta-button:hover::before { left: 100%; }
+
+        .cta-button:hover {
+            box-shadow: 0 0 30px rgba(0, 240, 255, 0.5);
+            transform: translateY(-3px);
+        }
+
+        /* ===== SECTIONS ===== */
+        .section {
+            padding: 6rem 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* ===== SEARCH & FILTER (sticky) ===== */
+        .search-sticky {
+            position: sticky;
+            top: 84px;
+            z-index: 20;
+            padding: 1rem;
+            background: rgba(10, 14, 39, 0.72);
+            border: 1px solid var(--border-glow);
+            border-radius: 16px;
+            backdrop-filter: blur(10px);
+        }
+
+        .search-container {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .search-input {
+            flex: 1;
+            min-width: 250px;
+            padding: 1rem 1.2rem;
+            background: var(--secondary-bg);
+            border: 1px solid var(--border-glow);
+            border-radius: 12px;
+            color: var(--text-primary);
+            font-family: var(--font-body);
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--accent-cyan);
+            box-shadow: 0 0 20px rgba(0, 240, 255, 0.2);
+        }
+
+        .filter-group {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .filter-btn {
+            padding: 0.7rem 1rem;
+            background: var(--secondary-bg);
+            border: 1px solid var(--border-glow);
+            color: var(--text-secondary);
+            border-radius: 12px;
+            cursor: pointer;
+            font-family: var(--font-body);
+            font-weight: 700;
+            transition: all 0.3s ease;
+        }
+
+        .filter-btn:hover,
+        .filter-btn.active {
+            background: rgba(0, 240, 255, 0.1);
+            border-color: var(--accent-cyan);
+            color: var(--accent-cyan);
+            box-shadow: 0 0 15px rgba(0, 240, 255, 0.2);
+        }
+
+        .tech-select {
+            min-width: 220px;
+            padding: 0.7rem 1rem;
+            background: var(--secondary-bg);
+            border: 1px solid var(--border-glow);
+            color: var(--text-primary);
+            border-radius: 12px;
+            font-weight: 700;
+        }
+
+        .tech-select:focus {
+            outline: none;
+            border-color: var(--accent-cyan);
+            box-shadow: 0 0 20px rgba(0, 240, 255, 0.2);
+        }
+
+        /* ===== PROJECT CARDS ===== */
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .project-card {
+            background: var(--secondary-bg);
+            border: 1px solid var(--border-glow);
+            border-radius: 15px;
+            overflow: hidden;
+            transition: all 0.4s ease;
+            position: relative;
+        }
+
+        .project-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(0, 240, 255, 0.1), rgba(168, 85, 247, 0.1));
+            opacity: 0;
+            transition: opacity 0.4s ease;
+            z-index: 1;
+        }
+
+        .project-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            border-color: var(--accent-cyan);
+            box-shadow: 0 20px 60px rgba(0, 240, 255, 0.3);
+        }
+
+        .project-card:hover::before { opacity: 1; }
+
+        .project-image {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            background: linear-gradient(135deg, #1a1f3a, #2a1f3a);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            position: relative;
+        }
+
+        .project-content {
+            padding: 1.5rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .project-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .project-title {
+            font-size: 1.5rem;
+            color: var(--text-primary);
+            font-family: var(--font-display);
+        }
+
+        .project-version { color: var(--accent-cyan); font-size: 0.9rem; font-weight: 700; }
+
+        .project-badge {
+            padding: 0.4rem 1rem;
+            border-radius: 999px;
+            font-size: 0.85rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            white-space: nowrap;
+        }
+
+        .badge-completed { background: rgba(0, 240, 255, 0.18); color: var(--accent-cyan); border: 1px solid rgba(0, 240, 255, 0.55); }
+        .badge-development { background: rgba(168, 85, 247, 0.18); color: var(--accent-purple); border: 1px solid rgba(168, 85, 247, 0.55); }
+        .badge-planned { background: rgba(255, 0, 110, 0.18); color: var(--accent-pink); border: 1px solid rgba(255, 0, 110, 0.55); }
+
+        .project-description { color: var(--text-secondary); margin-bottom: 1rem; line-height: 1.6; }
+
+        .project-tech { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1rem; }
+
+        .tech-tag {
+            padding: 0.3rem 0.8rem;
+            background: rgba(0, 240, 255, 0.08);
+            color: var(--accent-cyan);
+            border-radius: 10px;
+            font-size: 0.85rem;
+            border: 1px solid rgba(0, 240, 255, 0.22);
+        }
+
+        .project-date { font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 1rem; }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: rgba(0, 240, 255, 0.1);
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 1rem;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent-cyan), var(--accent-purple));
+            border-radius: 10px;
+            transition: width 0.5s ease;
+            box-shadow: 0 0 10px var(--accent-cyan);
+        }
+
+        .project-actions { display: flex; gap: 0.5rem; margin-top: 1rem; }
+
+        .btn-primary {
+            flex: 1;
+            padding: 0.8rem;
+            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple));
+            border: none;
+            color: var(--primary-bg);
+            font-weight: 800;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: var(--font-display);
+            letter-spacing: 1px;
+        }
+
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(0, 240, 255, 0.35); }
+
+        .btn-secondary {
+            flex: 1;
+            padding: 0.8rem;
+            background: transparent;
+            border: 1px solid rgba(0, 240, 255, 0.6);
+            color: var(--accent-cyan);
+            font-weight: 800;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: var(--font-display);
+            letter-spacing: 1px;
+        }
+
+        .btn-secondary:hover { background: rgba(0, 240, 255, 0.1); box-shadow: 0 0 20px rgba(0, 240, 255, 0.18); }
+
+        /* ===== MODAL ===== */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            backdrop-filter: blur(10px);
+            overflow-y: auto;
+        }
+
+        .modal.active { display: flex; align-items: center; justify-content: center; }
+
+        .modal-content {
+            background: var(--secondary-bg);
+            border: 2px solid var(--accent-cyan);
+            border-radius: 20px;
+            max-width: 900px;
+            width: 92%;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+            padding: 2.5rem;
+            box-shadow: 0 0 60px rgba(0, 240, 255, 0.35);
+            animation: modalSlideIn 0.4s ease;
+        }
+
+        @keyframes modalSlideIn {
+            from { opacity: 0; transform: translateY(-50px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            font-size: 2rem;
+            color: var(--accent-cyan);
+            cursor: pointer;
+            background: none;
+            border: none;
+            width: 44px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+        }
+
+        .modal-close:hover { background: rgba(0, 240, 255, 0.2); transform: rotate(90deg); }
+
+        /* ===== CONTACT SECTION ===== */
+        .contact-container { max-width: 800px; margin: 0 auto; }
+
+        .contact-intro {
+            text-align: center;
+            margin-bottom: 3rem;
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+        }
+
+        .contact-email { text-align: center; margin-bottom: 2rem; }
+
+        .contact-email a {
+            color: var(--accent-cyan);
+            text-decoration: none;
+            font-size: 1.3rem;
+            font-weight: 700;
+            transition: all 0.3s ease;
+        }
+
+        .contact-email a:hover { text-shadow: 0 0 20px var(--accent-cyan); }
+
+        .contact-form { display: grid; gap: 1.5rem; }
+
+        .form-group { display: flex; flex-direction: column; gap: 0.5rem; }
+
+        .form-group label { color: var(--text-primary); font-weight: 700; font-size: 1rem; }
+
+        .form-group input,
+        .form-group textarea {
+            padding: 1rem;
+            background: var(--secondary-bg);
+            border: 1px solid var(--border-glow);
+            border-radius: 12px;
+            color: var(--text-primary);
+            font-family: var(--font-body);
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--accent-cyan);
+            box-shadow: 0 0 20px rgba(0, 240, 255, 0.2);
+        }
+
+        .form-group textarea { resize: vertical; min-height: 150px; }
+
+        .submit-btn {
+            padding: 1.2rem;
+            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple));
+            border: none;
+            color: var(--primary-bg);
+            font-family: var(--font-display);
+            font-weight: 900;
+            font-size: 1.05rem;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .submit-btn:hover { transform: translateY(-3px); box-shadow: 0 15px 40px rgba(0, 240, 255, 0.35); }
+        .submit-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+
+        .form-message {
+            padding: 1rem;
+            border-radius: 12px;
+            text-align: center;
+            font-weight: 700;
+            display: none;
+            border: 1px solid var(--border-glow);
+        }
+
+        .form-message.success {
+            background: rgba(0, 240, 255, 0.14);
+            border-color: rgba(0, 240, 255, 0.55);
+            color: var(--accent-cyan);
+            display: block;
+        }
+
+        .form-message.error {
+            background: rgba(255, 0, 110, 0.14);
+            border-color: rgba(255, 0, 110, 0.55);
+            color: var(--accent-pink);
+            display: block;
+        }
+
+        /* ===== FOOTER ===== */
+        .footer {
+            background: var(--secondary-bg);
+            border-top: 1px solid var(--border-glow);
+            padding: 3rem 2rem 1rem;
+            margin-top: 6rem;
+        }
+
+        .footer-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-section h3 { color: var(--accent-cyan); margin-bottom: 1rem; font-size: 1.2rem; }
+
+        .footer-links {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .footer-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .footer-links a:hover { color: var(--accent-cyan); padding-left: 5px; }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border-glow);
+            color: var(--text-secondary);
+        }
+
+        .footer-bottom strong { color: var(--accent-cyan); }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 1024px) {
+            .projects-grid { grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); }
+        }
+
+        @media (max-width: 768px) {
+            .nav-menu {
+                position: fixed;
+                left: -100%;
+                top: 70px;
+                flex-direction: column;
+                background: rgba(10, 14, 39, 0.98);
+                width: 100%;
+                text-align: center;
+                transition: left 0.3s ease;
+                padding: 2rem 0;
+                border-bottom: 1px solid var(--border-glow);
+            }
+
+            .nav-menu.active { left: 0; }
+            .hamburger { display: flex; }
+            .projects-grid { grid-template-columns: 1fr; }
+            .search-container { flex-direction: column; align-items: stretch; }
+            .search-input { width: 100%; }
+            .modal-content { padding: 2rem 1rem; }
+            h1 { font-size: 2.5rem; }
+            .search-sticky { top: 72px; }
+        }
+
+        /* ===== ANIMATIONS ===== */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+
+        .fade-in.visible { opacity: 1; transform: translateY(0); }
+
+        /* ===== SCROLLBAR ===== */
+        ::-webkit-scrollbar { width: 10px; }
+        ::-webkit-scrollbar-track { background: var(--primary-bg); }
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(180deg, var(--accent-cyan), var(--accent-purple));
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover { background: var(--accent-cyan); }
+    </style>
+</head>
+<body>
+    <!-- NAVIGATION -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <div class="logo" onclick="scrollToSection('hero')">LAPO STUDIO</div>
+
+            <ul class="nav-menu" id="navMenu">
+                <li><a href="#hero" class="nav-link" data-i18n="nav.home">Inicio</a></li>
+                <li><a href="#projects" class="nav-link" data-i18n="nav.projects">Proyectos</a></li>
+                <li><a href="#development" class="nav-link" data-i18n="nav.inDev">En Desarrollo</a></li>
+                <li><a href="#contact" class="nav-link" data-i18n="nav.contact">Contacto</a></li>
+
+                <li id="adminLinkWrap" style="display:none;">
+                    <a class="pill-link" href="herramientas/admin.html" target="_blank" rel="noopener" data-i18n="nav.admin">Admin</a>
+                </li>
+
+                <li class="lang-selector">
+                    <button class="lang-btn" id="langBtn">🌐 <span id="currentLang">ES</span></button>
+                    <div class="lang-dropdown" id="langDropdown">
+                        <div class="lang-option" data-lang-code="es">🇪🇸 Español</div>
+                        <div class="lang-option" data-lang-code="en">🇬🇧 English</div>
+                        <div class="lang-option" data-lang-code="fr">🇫🇷 Français</div>
+                        <div class="lang-option" data-lang-code="de">🇩🇪 Deutsch</div>
+                        <div class="lang-option" data-lang-code="ja">🇯🇵 日本語</div>
+                    </div>
+                </li>
+            </ul>
+
+            <div class="hamburger" id="hamburger">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- HERO SECTION -->
+    <section class="hero" id="hero">
+        <div id="particles-js"></div>
+        <div class="hero-content">
+            <h1 class="hero-title">LAPO STUDIO</h1>
+            <p class="hero-subtitle" data-i18n="hero.subtitle">Creando el futuro del software</p>
+            <div class="typing-text" id="typingText"></div>
+            <a href="#projects" class="cta-button" data-i18n="hero.cta">Ver Proyectos ↓</a>
+        </div>
+    </section>
+
+    <!-- PROJECTS SECTION -->
+    <section class="section" id="projects">
+        <h2 class="section-title" data-i18n="sections.completed">Proyectos Completados</h2>
+
+        <div class="search-sticky">
+            <div class="search-container">
+                <input type="text" class="search-input" id="searchInput" placeholder="Buscar herramientas..." data-i18n-placeholder="search.placeholder">
+
+                <div class="filter-group" id="statusFilterGroup" aria-label="status filters">
+                    <button class="filter-btn active" data-status-filter="all" data-i18n="filters.statusAll">Todos</button>
+                    <button class="filter-btn" data-status-filter="completed" data-i18n="filters.statusCompleted">Completado</button>
+                    <button class="filter-btn" data-status-filter="development" data-i18n="filters.statusDevelopment">En Desarrollo</button>
+                    <button class="filter-btn" data-status-filter="planned" data-i18n="filters.statusPlanned">Planeado</button>
+                </div>
+
+                <select class="tech-select" id="techSelect" aria-label="technology filter">
+                    <option value="all">Tecnología: Todas</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="projects-grid" id="completedProjects"></div>
+    </section>
+
+    <!-- IN DEVELOPMENT SECTION -->
+    <section class="section" id="development">
+        <h2 class="section-title" data-i18n="sections.development">En Desarrollo</h2>
+        <div class="projects-grid" id="developmentProjects"></div>
+    </section>
+
+    <!-- PLANNED PROJECTS SECTION -->
+    <section class="section" id="planned">
+        <h2 class="section-title" data-i18n="sections.planned">Próximos Proyectos</h2>
+        <div class="projects-grid" id="plannedProjects"></div>
+    </section>
+
+    <!-- CONTACT SECTION -->
+    <section class="section" id="contact">
+        <h2 class="section-title" data-i18n="sections.contact">Contacto</h2>
+
+        <div class="contact-container">
+            <p class="contact-intro" data-i18n="contact.intro">¿Tienes una idea o quieres colaborar? ¡Me encantaría escucharte!</p>
+
+            <div class="contact-email">
+                <a href="mailto:lapostudiooficial@gmail.com">📧 lapostudiooficial@gmail.com</a>
+            </div>
+
+            <form class="contact-form" id="contactForm">
+                <div class="form-group">
+                    <label for="name" data-i18n="contact.form.name">Nombre</label>
+                    <input type="text" id="name" name="name" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="email" data-i18n="contact.form.email">Email</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="subject" data-i18n="contact.form.subject">Asunto</label>
+                    <input type="text" id="subject" name="subject" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="message" data-i18n="contact.form.message">Mensaje</label>
+                    <textarea id="message" name="message" required></textarea>
+                </div>
+
+                <button type="submit" class="submit-btn" id="submitBtn" data-i18n="contact.form.submit">Enviar Mensaje</button>
+
+                <div class="form-message" id="formMessage"></div>
+            </form>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>Lapo Studio</h3>
+                <p style="color: var(--text-secondary);" data-i18n="footer.description">Creando herramientas innovadoras con pasión y tecnología de vanguardia.</p>
+                <p class="mt-3" id="adminFooterWrap" style="display:none;">
+                    <a href="herramientas/admin.html" target="_blank" rel="noopener" class="pill-link" data-i18n="footer.admin">Abrir Admin</a>
+                </p>
+            </div>
+
+            <div class="footer-section">
+                <h3 data-i18n="footer.quickLinks">Enlaces Rápidos</h3>
+                <ul class="footer-links">
+                    <li><a href="#hero" data-i18n="nav.home">Inicio</a></li>
+                    <li><a href="#projects" data-i18n="nav.projects">Proyectos</a></li>
+                    <li><a href="#development" data-i18n="nav.inDev">En Desarrollo</a></li>
+                    <li><a href="#contact" data-i18n="nav.contact">Contacto</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-section">
+                <h3 data-i18n="footer.contact">Contacto</h3>
+                <ul class="footer-links">
+                    <li><a href="mailto:lapostudiooficial@gmail.com">📧 Email</a></li>
+                    <li style="color: var(--text-secondary);" data-i18n="footer.openToCollab">Abierto a colaboraciones</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>&copy; 2024 <strong>Lorenzo Pérez Olivera</strong> | Lapo Studio | <span data-i18n="footer.rights">Todos los derechos reservados</span></p>
+        </div>
+    </footer>
+
+    <!-- PROJECT MODAL -->
+    <div class="modal" id="projectModal">
+        <div class="modal-content">
+            <button class="modal-close" id="modalClose">&times;</button>
+            <div id="modalBody"></div>
+        </div>
+    </div>
+
+    <script>
+        // ===== TRANSLATIONS =====
+        const translations = {
+            es: {
+                nav: { home: 'Inicio', projects: 'Proyectos', inDev: 'En Desarrollo', contact: 'Contacto', admin: 'Admin' },
+                hero: {
+                    subtitle: 'Creando el futuro del software',
+                    typed: ['Herramientas Innovadoras', 'Automatización Inteligente', 'Soluciones Únicas'],
+                    cta: 'Ver Proyectos ↓'
+                },
+                sections: { completed: 'Proyectos Completados', development: 'En Desarrollo', planned: 'Próximos Proyectos', contact: 'Contacto' },
+                search: { placeholder: 'Buscar herramientas...' },
+                filters: {
+                    statusAll: 'Todos',
+                    statusCompleted: 'Completado',
+                    statusDevelopment: 'En Desarrollo',
+                    statusPlanned: 'Planeado',
+                    techAll: 'Tecnología: Todas'
+                },
+                badges: { completed: 'Completado', development: 'En Desarrollo', planned: 'Planeado' },
+                buttons: { details: 'Ver Detalles', download: 'Descargar', demo: 'Ver Demo', progress: 'Seguir Progreso' },
+                contact: {
+                    intro: '¿Tienes una idea o quieres colaborar? ¡Me encantaría escucharte!',
+                    form: {
+                        name: 'Nombre',
+                        email: 'Email',
+                        subject: 'Asunto',
+                        message: 'Mensaje',
+                        submit: 'Enviar Mensaje',
+                        sending: 'Enviando...',
+                        success: '¡Mensaje enviado con éxito! Te responderé pronto.',
+                        error: 'Hubo un error al enviar el mensaje. Por favor intenta de nuevo.'
+                    }
+                },
+                footer: {
+                    description: 'Creando herramientas innovadoras con pasión y tecnología de vanguardia.',
+                    quickLinks: 'Enlaces Rápidos',
+                    contact: 'Contacto',
+                    openToCollab: 'Abierto a colaboraciones',
+                    rights: 'Todos los derechos reservados',
+                    admin: 'Abrir Admin'
+                },
+                modal: { technologies: 'Tecnologías', description: 'Descripción', features: 'Características' }
+            },
+            en: {
+                nav: { home: 'Home', projects: 'Projects', inDev: 'In Development', contact: 'Contact', admin: 'Admin' },
+                hero: {
+                    subtitle: 'Creating the future of software',
+                    typed: ['Innovative Tools', 'Smart Automation', 'Unique Solutions'],
+                    cta: 'View Projects ↓'
+                },
+                sections: { completed: 'Completed Projects', development: 'In Development', planned: 'Upcoming Projects', contact: 'Contact' },
+                search: { placeholder: 'Search tools...' },
+                filters: {
+                    statusAll: 'All',
+                    statusCompleted: 'Completed',
+                    statusDevelopment: 'In Development',
+                    statusPlanned: 'Planned',
+                    techAll: 'Technology: All'
+                },
+                badges: { completed: 'Completed', development: 'In Development', planned: 'Planned' },
+                buttons: { details: 'View Details', download: 'Download', demo: 'View Demo', progress: 'Follow Progress' },
+                contact: {
+                    intro: "Have an idea or want to collaborate? I'd love to hear from you!",
+                    form: {
+                        name: 'Name',
+                        email: 'Email',
+                        subject: 'Subject',
+                        message: 'Message',
+                        submit: 'Send Message',
+                        sending: 'Sending...',
+                        success: "Message sent successfully! I'll respond soon.",
+                        error: 'There was an error sending the message. Please try again.'
+                    }
+                },
+                footer: {
+                    description: 'Building innovative tools with passion and cutting-edge technology.',
+                    quickLinks: 'Quick Links',
+                    contact: 'Contact',
+                    openToCollab: 'Open to collaborations',
+                    rights: 'All rights reserved',
+                    admin: 'Open Admin'
+                },
+                modal: { technologies: 'Technologies', description: 'Description', features: 'Features' }
+            },
+            fr: {
+                nav: { home: 'Accueil', projects: 'Projets', inDev: 'En Développement', contact: 'Contact', admin: 'Admin' },
+                hero: {
+                    subtitle: "Créer l'avenir du logiciel",
+                    typed: ['Outils Innovants', 'Automatisation Intelligente', 'Solutions Uniques'],
+                    cta: 'Voir les Projets ↓'
+                },
+                sections: { completed: 'Projets Terminés', development: 'En Développement', planned: 'Projets Prochains', contact: 'Contact' },
+                search: { placeholder: 'Rechercher des outils...' },
+                filters: {
+                    statusAll: 'Tous',
+                    statusCompleted: 'Terminé',
+                    statusDevelopment: 'En Développement',
+                    statusPlanned: 'Prévu',
+                    techAll: 'Technologie: Toutes'
+                },
+                badges: { completed: 'Terminé', development: 'En Développement', planned: 'Prévu' },
+                buttons: { details: 'Voir Détails', download: 'Télécharger', demo: 'Voir Démo', progress: 'Suivre Progrès' },
+                contact: {
+                    intro: "Avez-vous une idée ou souhaitez-vous collaborer? J'aimerais vous entendre!",
+                    form: {
+                        name: 'Nom',
+                        email: 'Email',
+                        subject: 'Sujet',
+                        message: 'Message',
+                        submit: 'Envoyer Message',
+                        sending: 'Envoi...',
+                        success: 'Message envoyé avec succès! Je répondrai bientôt.',
+                        error: "Une erreur s'est produite lors de l'envoi du message. Veuillez réessayer."
+                    }
+                },
+                footer: {
+                    description: 'Créer des outils innovants avec passion et technologie de pointe.',
+                    quickLinks: 'Liens Rapides',
+                    contact: 'Contact',
+                    openToCollab: 'Ouvert aux collaborations',
+                    rights: 'Tous droits réservés',
+                    admin: "Ouvrir l'Admin"
+                },
+                modal: { technologies: 'Technologies', description: 'Description', features: 'Caractéristiques' }
+            },
+            de: {
+                nav: { home: 'Startseite', projects: 'Projekte', inDev: 'In Entwicklung', contact: 'Kontakt', admin: 'Admin' },
+                hero: {
+                    subtitle: 'Die Zukunft der Software gestalten',
+                    typed: ['Innovative Tools', 'Intelligente Automatisierung', 'Einzigartige Lösungen'],
+                    cta: 'Projekte Ansehen ↓'
+                },
+                sections: { completed: 'Abgeschlossene Projekte', development: 'In Entwicklung', planned: 'Geplante Projekte', contact: 'Kontakt' },
+                search: { placeholder: 'Tools suchen...' },
+                filters: {
+                    statusAll: 'Alle',
+                    statusCompleted: 'Abgeschlossen',
+                    statusDevelopment: 'In Entwicklung',
+                    statusPlanned: 'Geplant',
+                    techAll: 'Technologie: Alle'
+                },
+                badges: { completed: 'Abgeschlossen', development: 'In Entwicklung', planned: 'Geplant' },
+                buttons: { details: 'Details Ansehen', download: 'Herunterladen', demo: 'Demo Ansehen', progress: 'Fortschritt Folgen' },
+                contact: {
+                    intro: 'Haben Sie eine Idee oder möchten Sie zusammenarbeiten? Ich würde gerne von Ihnen hören!',
+                    form: {
+                        name: 'Name',
+                        email: 'E-Mail',
+                        subject: 'Betreff',
+                        message: 'Nachricht',
+                        submit: 'Nachricht Senden',
+                        sending: 'Senden...',
+                        success: 'Nachricht erfolgreich gesendet! Ich werde bald antworten.',
+                        error: 'Beim Senden der Nachricht ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut.'
+                    }
+                },
+                footer: {
+                    description: 'Innovative Tools mit Leidenschaft und modernster Technologie schaffen.',
+                    quickLinks: 'Schnelllinks',
+                    contact: 'Kontakt',
+                    openToCollab: 'Offen für Zusammenarbeit',
+                    rights: 'Alle Rechte vorbehalten',
+                    admin: 'Admin öffnen'
+                },
+                modal: { technologies: 'Technologien', description: 'Beschreibung', features: 'Merkmale' }
+            },
+            ja: {
+                nav: { home: 'ホーム', projects: 'プロジェクト', inDev: '開発中', contact: 'お問い合わせ', admin: 'Admin' },
+                hero: {
+                    subtitle: 'ソフトウェアの未来を創造する',
+                    typed: ['革新的なツール', 'スマートオートメーション', '独自のソリューション'],
+                    cta: 'プロジェクトを見る ↓'
+                },
+                sections: { completed: '完成プロジェクト', development: '開発中', planned: '予定プロジェクト', contact: 'お問い合わせ' },
+                search: { placeholder: 'ツールを検索...' },
+                filters: {
+                    statusAll: 'すべて',
+                    statusCompleted: '完了',
+                    statusDevelopment: '開発中',
+                    statusPlanned: '計画中',
+                    techAll: '技術: すべて'
+                },
+                badges: { completed: '完了', development: '開発中', planned: '計画中' },
+                buttons: { details: '詳細を見る', download: 'ダウンロード', demo: 'デモを見る', progress: '進捗を追う' },
+                contact: {
+                    intro: 'アイデアをお持ちですか、それともコラボレーションをご希望ですか？ぜひお聞かせください！',
+                    form: {
+                        name: '名前',
+                        email: 'メール',
+                        subject: '件名',
+                        message: 'メッセージ',
+                        submit: 'メッセージを送信',
+                        sending: '送信中...',
+                        success: 'メッセージが正常に送信されました！すぐに返信します。',
+                        error: 'メッセージの送信中にエラーが発生しました。もう一度お試しください。'
+                    }
+                },
+                footer: {
+                    description: '情熱と最先端技術で革新的なツールを作成。',
+                    quickLinks: 'クイックリンク',
+                    contact: 'お問い合わせ',
+                    openToCollab: 'コラボレーション募集中',
+                    rights: '全著作権所有',
+                    admin: 'Adminを開く'
+                },
+                modal: { technologies: 'テクノロジー', description: '説明', features: '特徴' }
+            }
+        };
+
+        // ===== PROJECTS DATA (loaded from data/projects.json) =====
+        let projectsData = { completed: [], development: [], planned: [] };
+        let projectsLoaded = false;
+
+        async function loadProjectsData() {
+            try {
+                const res = await fetch('data/projects.json', { cache: 'no-store' });
+                if (!res.ok) throw new Error('No se pudo cargar data/projects.json');
+                const json = await res.json();
+                projectsData = {
+                    completed: Array.isArray(json.completed) ? json.completed : [],
+                    development: Array.isArray(json.development) ? json.development : [],
+                    planned: Array.isArray(json.planned) ? json.planned : []
+                };
+
+                // fuerza solo herramientas
+                for (const k of ['completed','development','planned']) {
+                    projectsData[k] = projectsData[k].map(p => ({ ...p, type: 'tool' }));
+                }
+
+                projectsLoaded = true;
+            } catch (e) {
+                console.warn('[Lapo] Fallback projects data:', e);
+                // fallback mínimo si falta el JSON
+                projectsData = { completed: [], development: [], planned: [] };
+                projectsLoaded = true;
+            }
+        }
+
+        // ===== LANGUAGE SYSTEM =====
+        let currentLanguage = 'es';
+
+        function initLanguage() {
+            const savedLang = localStorage.getItem('lapo-lang') || 'es';
+            changeLanguage(savedLang);
+        }
+
+        function changeLanguage(lang) {
+            currentLanguage = lang;
+            localStorage.setItem('lapo-lang', lang);
+            document.getElementById('currentLang').textContent = lang.toUpperCase();
+
+            // Translate all elements with data-i18n attribute
+            document.querySelectorAll('[data-i18n]').forEach(element => {
+                const keys = element.getAttribute('data-i18n').split('.');
+                let translation = translations[lang];
+                for (const key of keys) translation = translation?.[key];
+                if (typeof translation === 'string') element.textContent = translation;
+            });
+
+            // Translate placeholders
+            document.querySelectorAll('[data-i18n-placeholder]').forEach(element => {
+                const keys = element.getAttribute('data-i18n-placeholder').split('.');
+                let translation = translations[lang];
+                for (const key of keys) translation = translation?.[key];
+                if (typeof translation === 'string') element.placeholder = translation;
+            });
+
+            // Translate tech select placeholder
+            const techSelect = document.getElementById('techSelect');
+            if (techSelect) {
+                const first = techSelect.querySelector('option[value="all"]');
+                if (first) first.textContent = translations[lang].filters.techAll;
+            }
+
+            initTypingAnimation();
+
+            if (projectsLoaded) {
+                populateTechFilter();
+                renderAllProjects();
+                filterProjects();
+            }
+        }
+
+        // ===== NAVIGATION =====
+        const navbar = document.getElementById('navbar');
+        const hamburger = document.getElementById('hamburger');
+        const navMenu = document.getElementById('navMenu');
+        const navLinks = document.querySelectorAll('.nav-link');
+
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) navbar.classList.add('scrolled');
+            else navbar.classList.remove('scrolled');
+        });
+
+        hamburger.addEventListener('click', () => { navMenu.classList.toggle('active'); });
+        navLinks.forEach(link => link.addEventListener('click', () => navMenu.classList.remove('active')));
+
+        function scrollToSection(sectionId) {
+            const section = document.getElementById(sectionId);
+            if (section) section.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Language selector
+        const langBtn = document.getElementById('langBtn');
+        const langDropdown = document.getElementById('langDropdown');
+        const langOptions = document.querySelectorAll('.lang-option');
+
+        langBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            langDropdown.classList.toggle('active');
+        });
+
+        langOptions.forEach(option => {
+            option.addEventListener('click', () => {
+                const lang = option.getAttribute('data-lang-code');
+                changeLanguage(lang);
+                langDropdown.classList.remove('active');
+            });
+        });
+
+        document.addEventListener('click', () => langDropdown.classList.remove('active'));
+
+        // Admin link visibility (solo si ?admin=1)
+        function initAdminVisibility() {
+            const isAdmin = new URLSearchParams(window.location.search).get('admin') === '1';
+            const top = document.getElementById('adminLinkWrap');
+            const foot = document.getElementById('adminFooterWrap');
+            if (top) top.style.display = isAdmin ? '' : 'none';
+            if (foot) foot.style.display = isAdmin ? '' : 'none';
+        }
+
+        // ===== TYPING ANIMATION =====
+        let typingIndex = 0;
+        let charIndex = 0;
+        let currentText = '';
+        let isDeleting = false;
+        let typingTimeoutId = null;
+
+        function initTypingAnimation() {
+            const typingElement = document.getElementById('typingText');
+            const texts = translations[currentLanguage].hero.typed;
+
+            if (typingTimeoutId) clearTimeout(typingTimeoutId);
+
+            function type() {
+                const fullText = texts[typingIndex];
+
+                if (isDeleting) {
+                    currentText = fullText.substring(0, charIndex - 1);
+                    charIndex--;
+                } else {
+                    currentText = fullText.substring(0, charIndex + 1);
+                    charIndex++;
+                }
+
+                typingElement.textContent = currentText;
+
+                let typeSpeed = isDeleting ? 45 : 90;
+
+                if (!isDeleting && charIndex === fullText.length) {
+                    typeSpeed = 1800;
+                    isDeleting = true;
+                } else if (isDeleting && charIndex === 0) {
+                    isDeleting = false;
+                    typingIndex = (typingIndex + 1) % texts.length;
+                    typeSpeed = 450;
+                }
+
+                typingTimeoutId = setTimeout(type, typeSpeed);
+            }
+
+            typingElement.textContent = '';
+            charIndex = 0;
+            typingIndex = 0;
+            isDeleting = false;
+            type();
+        }
+
+        // ===== PARTICLES.JS =====
+        function initParticles() {
+            if (!window.particlesJS) return;
+            particlesJS('particles-js', {
+                particles: {
+                    number: { value: 80, density: { enable: true, value_area: 800 } },
+                    color: { value: '#00f0ff' },
+                    shape: { type: 'circle' },
+                    opacity: { value: 0.5, random: true, anim: { enable: true, speed: 1, opacity_min: 0.1, sync: false } },
+                    size: { value: 3, random: true, anim: { enable: true, speed: 2, size_min: 0.1, sync: false } },
+                    line_linked: { enable: true, distance: 150, color: '#00f0ff', opacity: 0.35, width: 1 },
+                    move: { enable: true, speed: 2, direction: 'none', random: true, straight: false, out_mode: 'out', bounce: false }
+                },
+                interactivity: {
+                    detect_on: 'canvas',
+                    events: { onhover: { enable: true, mode: 'grab' }, onclick: { enable: true, mode: 'push' }, resize: true },
+                    modes: { grab: { distance: 140, line_linked: { opacity: 1 } }, push: { particles_nb: 4 } }
+                },
+                retina_detect: true
+            });
+        }
+
+        // ===== PROJECT RENDERING =====
+        function createProjectCard(project, status) {
+            const t = translations[currentLanguage];
+
+            let badgeClass = 'badge-planned';
+            let badgeText = t.badges.planned;
+            if (status === 'completed') { badgeClass = 'badge-completed'; badgeText = t.badges.completed; }
+            if (status === 'development') { badgeClass = 'badge-development'; badgeText = t.badges.development; }
+
+            const card = document.createElement('div');
+            card.className = 'project-card fade-in';
+            card.setAttribute('data-type', 'tool');
+            card.setAttribute('data-status', status);
+            card.setAttribute('data-tech', (project.tech || []).join('|').toLowerCase());
+
+            const safeImg = (project.image || '🧰');
+            const imageHtml = String(safeImg).startsWith('http')
+                ? `<img src="${safeImg}" alt="${project.title}" style="width:100%;height:100%;object-fit:cover;" />`
+                : `${safeImg}`;
+
+            let cardContent = `
+                <div class="project-image">${imageHtml}</div>
+                <div class="project-content">
+                    <div class="project-header">
+                        <div>
+                            <h3 class="project-title">${project.title || ''}</h3>
+                            ${project.version ? `<span class="project-version">${project.version}</span>` : ''}
+                        </div>
+                        <span class="project-badge ${badgeClass}">${badgeText}</span>
+                    </div>
+                    <p class="project-description">${project.description || ''}</p>
+                    <div class="project-tech">
+                        ${(project.tech || []).map(tech => `<span class="tech-tag">${tech}</span>`).join('')}
+                    </div>
+            `;
+
+            if (status === 'completed') {
+                cardContent += `
+                    <p class="project-date">📅 ${project.date || ''}</p>
+                    <div class="project-actions">
+                        <button class="btn-primary" onclick="openModal(${project.id}, '${status}')">${t.buttons.details}</button>
+                        <button class="btn-secondary" onclick="window.open('${project.downloadLink || '#'}', '_blank')">${t.buttons.download}</button>
+                    </div>
+                `;
+            } else if (status === 'development') {
+                const progress = Number(project.progress ?? 0);
+                cardContent += `
+                    <div class="progress-bar"><div class="progress-fill" style="width: ${Math.max(0, Math.min(100, progress))}%"></div></div>
+                    <p class="project-date">🎯 ${project.estimatedDate || ''} • ${progress}%</p>
+                    <div class="project-actions">
+                        <button class="btn-primary" onclick="openModal(${project.id}, '${status}')">${t.buttons.details}</button>
+                        ${project.repoLink ? `<button class="btn-secondary" onclick="window.open('${project.repoLink}', '_blank')">${t.buttons.progress}</button>` : ''}
+                    </div>
+                `;
+            } else {
+                cardContent += `
+                    <p class="project-date">🗓️ ${project.estimatedDate || ''}</p>
+                `;
+            }
+
+            cardContent += `</div>`;
+            card.innerHTML = cardContent;
+            return card;
+        }
+
+        function renderAllProjects() {
+            const completedContainer = document.getElementById('completedProjects');
+            const developmentContainer = document.getElementById('developmentProjects');
+            const plannedContainer = document.getElementById('plannedProjects');
+
+            completedContainer.innerHTML = '';
+            developmentContainer.innerHTML = '';
+            plannedContainer.innerHTML = '';
+
+            (projectsData.completed || []).forEach(project => completedContainer.appendChild(createProjectCard(project, 'completed')));
+            (projectsData.development || []).forEach(project => developmentContainer.appendChild(createProjectCard(project, 'development')));
+            (projectsData.planned || []).forEach(project => plannedContainer.appendChild(createProjectCard(project, 'planned')));
+
+            observeElements();
+        }
+
+        function getAllProjects() {
+            return [
+                ...(projectsData.completed || []),
+                ...(projectsData.development || []),
+                ...(projectsData.planned || [])
+            ];
+        }
+
+        function populateTechFilter() {
+            const techSelect = document.getElementById('techSelect');
+            const current = techSelect.value || 'all';
+
+            const set = new Set();
+            getAllProjects().forEach(p => (p.tech || []).forEach(t => set.add(String(t))));
+            const techs = Array.from(set).sort((a,b) => a.localeCompare(b));
+
+            techSelect.innerHTML = '';
+            const optAll = document.createElement('option');
+            optAll.value = 'all';
+            optAll.textContent = translations[currentLanguage].filters.techAll;
+            techSelect.appendChild(optAll);
+
+            for (const tech of techs) {
+                const opt = document.createElement('option');
+                opt.value = tech;
+                opt.textContent = tech;
+                techSelect.appendChild(opt);
+            }
+
+            techSelect.value = techs.includes(current) ? current : 'all';
+        }
+
+        // ===== SEARCH & FILTER =====
+        const searchInput = document.getElementById('searchInput');
+        const statusButtons = document.querySelectorAll('#statusFilterGroup .filter-btn');
+        const techSelect = document.getElementById('techSelect');
+
+        let currentStatusFilter = 'all';
+        let currentTechFilter = 'all';
+
+        searchInput.addEventListener('input', filterProjects);
+
+        statusButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                statusButtons.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                currentStatusFilter = btn.getAttribute('data-status-filter');
+                filterProjects();
+            });
+        });
+
+        techSelect.addEventListener('change', () => {
+            currentTechFilter = techSelect.value;
+            filterProjects();
+        });
+
+        function filterProjects() {
+            const searchTerm = searchInput.value.toLowerCase();
+            const allCards = document.querySelectorAll('.project-card');
+            const techLower = String(currentTechFilter || 'all').toLowerCase();
+
+            allCards.forEach(card => {
+                const status = card.getAttribute('data-status');
+                const title = (card.querySelector('.project-title')?.textContent || '').toLowerCase();
+                const description = (card.querySelector('.project-description')?.textContent || '').toLowerCase();
+                const techData = (card.getAttribute('data-tech') || '').toLowerCase();
+
+                const matchesSearch = title.includes(searchTerm) || description.includes(searchTerm);
+                const matchesStatus = currentStatusFilter === 'all' || status === currentStatusFilter;
+                const matchesTech = techLower === 'all' || techData.includes(techLower);
+
+                card.style.display = (matchesSearch && matchesStatus && matchesTech) ? 'block' : 'none';
+            });
+        }
+
+        // ===== MODAL =====
+        const modal = document.getElementById('projectModal');
+        const modalClose = document.getElementById('modalClose');
+        const modalBody = document.getElementById('modalBody');
+
+        function openModal(projectId, status) {
+            const project = [...(projectsData.completed || []), ...(projectsData.development || [])].find(p => p.id === projectId);
+            if (!project) return;
+
+            const t = translations[currentLanguage];
+
+            let modalContent = `
+                <h2 style="font-family: var(--font-display); color: var(--accent-cyan); margin-bottom: 0.5rem;">
+                    ${project.title || ''} ${project.version ? `<span style='color: var(--text-secondary); font-size: 0.9em;'>(${project.version})</span>` : ''}
+                </h2>
+                <div style="margin-bottom: 1.25rem;">
+                    <span class="project-badge ${status === 'completed' ? 'badge-completed' : 'badge-development'}">
+                        ${status === 'completed' ? t.badges.completed : t.badges.development}
+                    </span>
+                </div>
+            `;
+
+            if (project.descriptionLong) {
+                modalContent += `
+                    <h3 style="color: var(--accent-purple); margin: 1.2rem 0 0.6rem;">${t.modal.description}</h3>
+                    <p style="color: var(--text-secondary); line-height: 1.85;">${project.descriptionLong}</p>
+                `;
+            }
+
+            if (Array.isArray(project.features) && project.features.length) {
+                modalContent += `
+                    <h3 style="color: var(--accent-purple); margin: 1.2rem 0 0.6rem;">${t.modal.features}</h3>
+                    <ul style="color: var(--text-secondary); line-height: 2; padding-left: 1.2rem;">
+                        ${project.features.map(f => `<li>${f}</li>`).join('')}
+                    </ul>
+                `;
+            }
+
+            modalContent += `
+                <h3 style="color: var(--accent-purple); margin: 1.2rem 0 0.6rem;">${t.modal.technologies}</h3>
+                <div class="project-tech" style="margin-bottom: 1rem;">
+                    ${(project.tech || []).map(tech => `<span class="tech-tag">${tech}</span>`).join('')}
+                </div>
+            `;
+
+            if (status === 'completed') {
+                modalContent += `
+                    <div style="display:flex; gap: 0.75rem; margin-top: 1.2rem;">
+                        <button class="btn-primary" onclick="window.open('${project.downloadLink || '#'}', '_blank')" style="flex:1;">${t.buttons.download}</button>
+                        <button class="btn-secondary" onclick="window.open('${project.demoLink || '#'}', '_blank')" style="flex:1;">${t.buttons.demo}</button>
+                    </div>
+                `;
+            } else {
+                const progress = Number(project.progress ?? 0);
+                modalContent += `
+                    <div class="progress-bar" style="margin-top: 1.2rem;"><div class="progress-fill" style="width: ${Math.max(0, Math.min(100, progress))}%"></div></div>
+                    <p style="text-align:center; color: var(--text-secondary);">${progress}% • ${project.estimatedDate || ''}</p>
+                    ${project.repoLink ? `<div style="margin-top: 1rem;"><button class="btn-secondary" style="width:100%;" onclick="window.open('${project.repoLink}', '_blank')">${t.buttons.progress}</button></div>` : ''}
+                `;
+            }
+
+            modalBody.innerHTML = modalContent;
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal() {
+            modal.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        modalClose.addEventListener('click', closeModal);
+        modal.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
+
+        // ===== CONTACT FORM =====
+        const contactForm = document.getElementById('contactForm');
+        const formMessage = document.getElementById('formMessage');
+        const submitBtn = document.getElementById('submitBtn');
+
+        // emailjs.init("YOUR_PUBLIC_KEY");
+
+        contactForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const name = document.getElementById('name').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const subject = document.getElementById('subject').value.trim();
+            const message = document.getElementById('message').value.trim();
+
+            if (!name || !email || !subject || !message) {
+                showMessage('error', translations[currentLanguage].contact.form.error);
+                return;
+            }
+
+            submitBtn.disabled = true;
+            submitBtn.textContent = translations[currentLanguage].contact.form.sending;
+
+            // Simulación (reemplaza por EmailJS)
+            setTimeout(() => {
+                showMessage('success', translations[currentLanguage].contact.form.success);
+                contactForm.reset();
+                submitBtn.disabled = false;
+                submitBtn.textContent = translations[currentLanguage].contact.form.submit;
+            }, 1200);
+        });
+
+        function showMessage(type, text) {
+            formMessage.className = 'form-message ' + type;
+            formMessage.textContent = text;
+            setTimeout(() => { formMessage.className = 'form-message'; }, 5000);
+        }
+
+        // ===== SCROLL ANIMATIONS =====
+        const observerOptions = { threshold: 0.1, rootMargin: '0px 0px -50px 0px' };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('visible'); });
+        }, observerOptions);
+
+        function observeElements() {
+            document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+        }
+
+        // ===== INITIALIZATION =====
+        document.addEventListener('DOMContentLoaded', async () => {
+            initAdminVisibility();
+            initLanguage();
+            initParticles();
+
+            await loadProjectsData();
+            populateTechFilter();
+            renderAllProjects();
+            filterProjects();
+        });
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && modal.classList.contains('active')) closeModal();
+        });
+    </script>
+</body>
+</html>
