@@ -1,0 +1,123 @@
+{
+  "completed": [
+    {
+      "id": 1,
+      "type": "tool",
+      "title": "CyberTask Manager",
+      "version": "v2.1",
+      "description": "Gestor de tareas avanzado con IA integrada para productividad máxima.",
+      "descriptionLong": "Un gestor de tareas que utiliza IA para priorizar actividades, estimar tiempos y optimizar tu flujo de trabajo.",
+      "tech": ["Python", "TensorFlow", "React", "SQLite"],
+      "date": "2024-01",
+      "image": "🚀",
+      "features": ["IA para priorización", "Sincronización en la nube", "Analíticas avanzadas", "Modo offline"],
+      "downloadLink": "#",
+      "demoLink": "#"
+    },
+    {
+      "id": 2,
+      "type": "tool",
+      "title": "CodeSync Pro",
+      "version": "v3.0",
+      "description": "Herramienta de colaboración en tiempo real para desarrolladores.",
+      "descriptionLong": "Edición simultánea de código, chat integrado y control de versiones automático. Ideal para pair programming remoto.",
+      "tech": ["Node.js", "WebSocket", "Vue.js", "MongoDB"],
+      "date": "2023-09",
+      "image": "💻",
+      "features": ["Editor en tiempo real", "Chat integrado", "Snippets compartidos", "Integraciones Git"],
+      "downloadLink": "#",
+      "demoLink": "#"
+    },
+    {
+      "id": 3,
+      "type": "tool",
+      "title": "Neon Deploy",
+      "version": "v1.0",
+      "description": "CLI para automatizar builds, versionado y deploys en proyectos.",
+      "descriptionLong": "Automatiza pipelines locales: empaquetado, versionado semántico, changelog y deploy a múltiples destinos.",
+      "tech": ["TypeScript", "Node.js", "Git"],
+      "date": "2024-03",
+      "image": "⚡",
+      "features": ["Versionado semántico", "Plantillas de release", "Hooks", "Modo dry-run"],
+      "downloadLink": "#",
+      "demoLink": "#"
+    }
+  ],
+  "development": [
+    {
+      "id": 4,
+      "type": "tool",
+      "title": "AI Design Assistant",
+      "version": "Beta 0.4",
+      "description": "Asistente de diseño con IA para crear interfaces modernas.",
+      "descriptionLong": "Genera paletas, sugiere layouts y crea prototipos interactivos. Pensado para acelerar el trabajo de UI/UX.",
+      "tech": ["Python", "PyTorch", "Electron", "Figma API"],
+      "progress": 45,
+      "estimatedDate": "2025-Q1",
+      "image": "🎨",
+      "features": ["Generación de paletas IA", "Export a Figma", "Componentes reutilizables", "Preview en tiempo real"],
+      "repoLink": "#"
+    },
+    {
+      "id": 5,
+      "type": "tool",
+      "title": "DevMetrics Dashboard",
+      "version": "Alpha 0.2",
+      "description": "Dashboard de métricas de desarrollo y productividad.",
+      "descriptionLong": "Centraliza métricas, hábitos y objetivos: commits, issues, tiempo de foco y salud del proyecto.",
+      "tech": ["React", "D3.js", "FastAPI", "Redis"],
+      "progress": 25,
+      "estimatedDate": "2025-Q2",
+      "image": "📊",
+      "features": ["Widgets custom", "Export CSV", "Alertas", "Integraciones"],
+      "repoLink": "#"
+    }
+  ],
+  "planned": [
+    {
+      "id": 6,
+      "type": "tool",
+      "title": "Markdown Magic",
+      "description": "Editor Markdown con preview en vivo y exportación a múltiples formatos.",
+      "tech": ["Electron", "TypeScript", "Marked.js"],
+      "estimatedDate": "2025-Q3",
+      "image": "📝"
+    },
+    {
+      "id": 7,
+      "type": "tool",
+      "title": "LogSense",
+      "description": "Analizador de logs con filtros y detección de patrones para debug rápido.",
+      "tech": ["Go", "WebAssembly", "Regex"],
+      "estimatedDate": "2025-Q4",
+      "image": "🔎"
+    },
+    {
+      "id": 8,
+      "type": "tool",
+      "title": "Backup Runner",
+      "description": "Herramienta de backups incrementales con cifrado y verificaciones.",
+      "tech": ["Python", "Cryptography", "CLI"],
+      "estimatedDate": "2026-Q1",
+      "image": "🧰"
+    },
+    {
+      "id": 9,
+      "type": "tool",
+      "title": "API Scaffold",
+      "description": "Generador de plantillas para APIs con auth, docs y tests.",
+      "tech": ["FastAPI", "PostgreSQL", "Docker"],
+      "estimatedDate": "2026-Q1",
+      "image": "🏗️"
+    },
+    {
+      "id": 10,
+      "type": "tool",
+      "title": "Patch Notes Studio",
+      "description": "Genera changelogs bonitos desde commits y etiquetas.",
+      "tech": ["Node.js", "Conventional Commits"],
+      "estimatedDate": "2026-Q2",
+      "image": "📦"
+    }
+  ]
+}
